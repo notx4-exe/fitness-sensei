@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fitness Sensei – Silent Ascend</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg:#0B0F1A;
+--primary:#00F5A0;
+--secondary:#00C3FF;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+background:var(--bg);
+color:white;
+font-family:'Poppins',sans-serif;
+max-width:480px;
+margin:auto;
+overflow-x:hidden;
+}
+
+.page{
+display:none;
+padding:24px;
+animation:fade 0.6s ease;
+}
+
+.active{display:block}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+h1,h2{
+font-family:'Orbitron',sans-serif;
+margin-bottom:12px;
+}
+
+input,select{
+width:100%;
+padding:12px;
+border-radius:14px;
+border:none;
+margin-bottom:16px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:14px;
+border-radius:16px;
+border:none;
+background:var(--primary);
+color:black;
+font-weight:bold;
+margin-top:10px;
+transition:0.3s;
+}
+
+button:hover{
+box-shadow:0 0 15px var(--primary);
+}
+
+.option-btn{
+background:#111827;
+color:white;
+border:1px solid #222;
+}
+
+.option-btn.selected{
+background:var(--secondary);
+color:black;
+}
+
+.progress-bar{
+height:14px;
+background:#111;
+border-radius:14px;
+overflow:hidden;
+margin:16px 0;
+}
+
+.progress-fill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,var(--primary),var(--secondary));
+transition:width 0.8s ease;
+}
+
+.calendar{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:4px;
+margin-top:12px;
+}
+
+.day-box{
+height:28px;
+border-radius:6px;
+background:#111;
+}
+
+.day-box.completed{
+background:var(--primary);
+}
+
+.day-box.current{
+border:2px solid var(--secondary);
+}
+
+.exercise{
+margin:10px 0;
+background:#111;
+padding:10px;
+border-radius:12px;
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+<h1>FITNESS SENSEI</h1>
+<p>Silent Ascend Protocol</p>
+<input id="nameInput" placeholder="Enter your name">
+<button onclick="enterSystem()">ENTER THE SYSTEM</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+<h2>User Data</h2>
+<input id="age" placeholder="Age">
+<input id="height" placeholder="Height (cm)">
+<input id="weight" placeholder="Weight (kg)">
+<select id="goal">
+<option>Bodybuilding</option>
+<option>Fat Loss</option>
+<option>Casual</option>
+<option>Warm Up</option>
+</select>
+<button onclick="saveUserData()">Next</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+<h2>Select Focus</h2>
+<div id="focusOptions">
+<button class="option-btn" onclick="toggleFocus(this)">Arms</button>
+<button class="option-btn" onclick="toggleFocus(this)">Core</button>
+<button class="option-btn" onclick="toggleFocus(this)">Legs</button>
+<button class="option-btn" onclick="toggleFocus(this)">Overall Body</button>
+</div>
+<button onclick="saveFocus()">Next</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="page4">
+<h2>Select Mode</h2>
+<button onclick="setMode('Daily')">Daily Exercise</button>
+<button onclick="setMode('Custom')">Custom Mode</button>
+<button style="background:var(--secondary)" onclick="setMode('100')">100-Day Discipline Challenge</button>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="page5">
+<h2>100 Day Dashboard</h2>
+<p id="dayDisplay"></p>
+<div class="progress-bar">
+<div class="progress-fill" id="xpBar"></div>
+</div>
+<p id="levelDisplay"></p>
+<div class="calendar" id="calendar"></div>
+<button onclick="goToWorkout()">Start Today's Mission</button>
+</div>
+
+<!-- PAGE 6 -->
+<div class="page" id="page6">
+<h2>Workout Mission</h2>
+<div id="workoutList"></div>
+<button onclick="completeMission()">Complete Mission</button>
+</div>
+
+<!-- PAGE 7 -->
+<div class="page" id="page7">
+<h2>MISSION COMPLETE</h2>
+<p id="xpGained"></p>
+<p id="levelAfter"></p>
+<button onclick="goDashboard()">Continue</button>
+</div>
+
+<script>
+
+let state={
+name:"",
+age:"",
+height:"",
+weight:"",
+goal:"",
+focus:[],
+mode:"",
+xp:0,
+currentDay:1,
+completedDays:[]
+};
+
+function saveState(){localStorage.setItem("fitnessSensei",JSON.stringify(state))}
+function loadState(){
+let data=localStorage.getItem("fitnessSensei");
+if(data){state=JSON.parse(data)}
+}
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+function enterSystem(){
+let name=document.getElementById("nameInput").value;
+if(!name)return alert("Name required");
+state.name=name;
+saveState();
+showPage("page2");
+}
+
+function saveUserData(){
+state.age=document.getElementById("age").value;
+state.height=document.getElementById("height").value;
+state.weight=document.getElementById("weight").value;
+state.goal=document.getElementById("goal").value;
+saveState();
+showPage("page3");
+}
+
+function toggleFocus(btn){
+btn.classList.toggle("selected");
+}
+
+function saveFocus(){
+let selected=[];
+document.querySelectorAll(".option-btn.selected").forEach(b=>selected.push(b.innerText));
+state.focus=selected;
+saveState();
+showPage("page4");
+}
+
+function setMode(mode){
+state.mode=mode;
+if(mode==="100"){
+state.currentDay=1;
+state.xp=0;
+state.completedDays=[];
+}
+saveState();
+renderDashboard();
+showPage("page5");
+}
+
+function renderDashboard(){
+document.getElementById("dayDisplay").innerText=`Day ${state.currentDay} / 100`;
+document.getElementById("levelDisplay").innerText=`Level ${Math.floor(state.xp/1000)}`;
+let percent=(state.xp%1000)/10;
+document.getElementById("xpBar").style.width=percent+"%";
+
+let cal=document.getElementById("calendar");
+cal.innerHTML="";
+for(let i=1;i<=100;i++){
+let box=document.createElement("div");
+box.className="day-box";
+if(state.completedDays.includes(i))box.classList.add("completed");
+if(i===state.currentDay)box.classList.add("current");
+cal.appendChild(box);
+}
+}
+
+function goToWorkout(){
+generateWorkout();
+showPage("page6");
+}
+
+function generateWorkout(){
+let list=document.getElementById("workoutList");
+list.innerHTML="";
+let exercises=[
+"Push Ups x15",
+"Squats x20",
+"Plank 30s",
+"Lunges x15",
+"Jumping Jacks x30"
+];
+exercises.forEach(ex=>{
+let div=document.createElement("div");
+div.className="exercise";
+div.innerHTML=`<input type="checkbox"> ${ex}`;
+list.appendChild(div);
+});
+}
+
+function completeMission(){
+let checks=document.querySelectorAll("#workoutList input:checked");
+if(checks.length<5){
+alert("Discipline Failure. Restart Required.");
+state.currentDay=1;
+state.xp=0;
+state.completedDays=[];
+saveState();
+renderDashboard();
+showPage("page5");
+return;
+}
+state.xp+=100;
+state.completedDays.push(state.currentDay);
+state.currentDay++;
+saveState();
+
+document.getElementById("xpGained").innerText="XP Gained: 100";
+document.getElementById("levelAfter").innerText=`Level: ${Math.floor(state.xp/1000)}`;
+showPage("page7");
+}
+
+function goDashboard(){
+renderDashboard();
+showPage("page5");
+}
+
+loadState();
+</script>
+
+</body>
+</html>
