@@ -1,335 +1,511 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fitness Sensei – Silent Ascend</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITNESS SENSEI – Silent Ascend</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0B0F1A;
+            --primary: #00F5A0;
+            --secondary: #00C3FF;
+            --text-main: #FFFFFF;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --radius: 16px;
+            --shadow-glow: 0 0 15px rgba(0, 245, 160, 0.4);
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-<style>
-:root{
---bg:#0B0F1A;
---primary:#00F5A0;
---secondary:#00C3FF;
-}
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
 
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-background:var(--bg);
-color:white;
-font-family:'Poppins',sans-serif;
-max-width:480px;
-margin:auto;
-overflow-x:hidden;
-}
+        /* Animated Background */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 245, 160, 0.05) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseBg 8s infinite alternate;
+        }
 
-.page{
-display:none;
-padding:24px;
-animation:fade 0.6s ease;
-}
+        @keyframes pulseBg {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0.8; }
+        }
 
-.active{display:block}
+        #app-container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            position: relative;
+        }
 
-@keyframes fade{
-from{opacity:0;transform:translateY(15px)}
-to{opacity:1;transform:translateY(0)}
-}
+        /* SPA Sections */
+        .page {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
 
-h1,h2{
-font-family:'Orbitron',sans-serif;
-margin-bottom:12px;
-}
+        .page.active {
+            display: flex;
+        }
 
-input,select{
-width:100%;
-padding:12px;
-border-radius:14px;
-border:none;
-margin-bottom:16px;
-font-size:16px;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-button{
-width:100%;
-padding:14px;
-border-radius:16px;
-border:none;
-background:var(--primary);
-color:black;
-font-weight:bold;
-margin-top:10px;
-transition:0.3s;
-}
+        /* Typography */
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
 
-button:hover{
-box-shadow:0 0 15px var(--primary);
-}
+        h1 { font-size: 2rem; color: var(--primary); text-shadow: var(--shadow-glow); }
+        .subtitle { font-size: 0.9rem; text-align: center; color: var(--secondary); margin-top: -10px; opacity: 0.8; }
 
-.option-btn{
-background:#111827;
-color:white;
-border:1px solid #222;
-}
+        /* UI Elements */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            width: 100%;
+        }
 
-.option-btn.selected{
-background:var(--secondary);
-color:black;
-}
+        input, select {
+            width: 100%;
+            padding: 14px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border 0.3s;
+        }
 
-.progress-bar{
-height:14px;
-background:#111;
-border-radius:14px;
-overflow:hidden;
-margin:16px 0;
-}
+        input:focus { border-color: var(--secondary); }
 
-.progress-fill{
-height:100%;
-width:0%;
-background:linear-gradient(90deg,var(--primary),var(--secondary));
-transition:width 0.8s ease;
-}
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: var(--radius);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
 
-.calendar{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:4px;
-margin-top:12px;
-}
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000;
+            box-shadow: var(--shadow-glow);
+            animation: glowPulse 2s infinite;
+        }
 
-.day-box{
-height:28px;
-border-radius:6px;
-background:#111;
-}
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 5px rgba(0, 245, 160, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(0, 245, 160, 0.7); }
+            100% { box-shadow: 0 0 5px rgba(0, 245, 160, 0.4); }
+        }
 
-.day-box.completed{
-background:var(--primary);
-}
+        .btn-toggle {
+            background: var(--glass);
+            color: white;
+            border: 1px solid var(--glass-border);
+            margin: 5px 0;
+        }
 
-.day-box.current{
-border:2px solid var(--secondary);
-}
+        .btn-toggle.selected {
+            background: var(--secondary);
+            color: #000;
+            border-color: var(--secondary);
+        }
 
-.exercise{
-margin:10px 0;
-background:#111;
-padding:10px;
-border-radius:12px;
-}
-</style>
+        /* Progress Bar */
+        .xp-container {
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .xp-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-top: 15px;
+        }
+
+        .day-cell {
+            aspect-ratio: 1;
+            background: var(--glass);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .day-cell.completed {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        .day-cell.current {
+            border: 2px solid var(--secondary);
+            animation: borderPulse 1s infinite alternate;
+        }
+
+        @keyframes borderPulse {
+            from { border-color: var(--secondary); }
+            to { border-color: #fff; }
+        }
+
+        /* Workout List */
+        .workout-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: var(--glass);
+            margin-bottom: 10px;
+            border-radius: 12px;
+        }
+
+        .workout-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            accent-color: var(--primary);
+            margin: 0;
+        }
+
+        .stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
+
+        .highlight-card {
+            border: 2px solid var(--primary);
+            box-shadow: inset 0 0 15px rgba(0, 245, 160, 0.2);
+        }
+    </style>
 </head>
 <body>
+    <div class="bg-glow"></div>
+    <div id="app-container">
 
-<!-- PAGE 1 -->
-<div class="page active" id="page1">
-<h1>FITNESS SENSEI</h1>
-<p>Silent Ascend Protocol</p>
-<input id="nameInput" placeholder="Enter your name">
-<button onclick="enterSystem()">ENTER THE SYSTEM</button>
-</div>
+        <section id="page1" class="page active">
+            <h1>FITNESS SENSEI</h1>
+            <p class="subtitle">Silent Ascend Protocol</p>
+            <div class="glass-card" style="margin-top: 40px;">
+                <input type="text" id="login-name" placeholder="IDENTIFY YOURSELF (NAME)">
+                <button class="btn btn-primary" onclick="app.login()">ENTER THE SYSTEM</button>
+            </div>
+        </section>
 
-<!-- PAGE 2 -->
-<div class="page" id="page2">
-<h2>User Data</h2>
-<input id="age" placeholder="Age">
-<input id="height" placeholder="Height (cm)">
-<input id="weight" placeholder="Weight (kg)">
-<select id="goal">
-<option>Bodybuilding</option>
-<option>Fat Loss</option>
-<option>Casual</option>
-<option>Warm Up</option>
-</select>
-<button onclick="saveUserData()">Next</button>
-</div>
+        <section id="page2" class="page">
+            <h2>PROTOCOL PARAMETERS</h2>
+            <div class="glass-card">
+                <input type="number" id="user-age" placeholder="AGE">
+                <input type="number" id="user-height" placeholder="HEIGHT (CM)">
+                <input type="number" id="user-weight" placeholder="WEIGHT (KG)">
+                <select id="user-goal">
+                    <option value="" disabled selected>SELECT GOAL</option>
+                    <option value="Bodybuilding">Bodybuilding</option>
+                    <option value="Fat Loss">Fat Loss</option>
+                    <option value="Casual">Casual</option>
+                    <option value="Warm Up">Warm Up</option>
+                </select>
+                <button class="btn btn-primary" onclick="app.saveUserData()">CONTINUE</button>
+            </div>
+        </section>
 
-<!-- PAGE 3 -->
-<div class="page" id="page3">
-<h2>Select Focus</h2>
-<div id="focusOptions">
-<button class="option-btn" onclick="toggleFocus(this)">Arms</button>
-<button class="option-btn" onclick="toggleFocus(this)">Core</button>
-<button class="option-btn" onclick="toggleFocus(this)">Legs</button>
-<button class="option-btn" onclick="toggleFocus(this)">Overall Body</button>
-</div>
-<button onclick="saveFocus()">Next</button>
-</div>
+        <section id="page3" class="page">
+            <h2>TARGET NEURAL FOCUS</h2>
+            <div id="focus-container">
+                <button class="btn btn-toggle" onclick="app.toggleFocus(this, 'Arms')">Arms</button>
+                <button class="btn btn-toggle" onclick="app.toggleFocus(this, 'Core')">Core</button>
+                <button class="btn btn-toggle" onclick="app.toggleFocus(this, 'Legs')">Legs</button>
+                <button class="btn btn-toggle" onclick="app.toggleFocus(this, 'Overall Body')">Overall Body</button>
+            </div>
+            <button class="btn btn-primary" onclick="app.saveFocus()">NEXT PHASE</button>
+        </section>
 
-<!-- PAGE 4 -->
-<div class="page" id="page4">
-<h2>Select Mode</h2>
-<button onclick="setMode('Daily')">Daily Exercise</button>
-<button onclick="setMode('Custom')">Custom Mode</button>
-<button style="background:var(--secondary)" onclick="setMode('100')">100-Day Discipline Challenge</button>
-</div>
+        <section id="page4" class="page">
+            <h2>OPERATION MODE</h2>
+            <button class="btn btn-toggle" onclick="app.selectMode('daily')">Daily Exercise</button>
+            <button class="btn btn-toggle" onclick="app.selectMode('custom')">Custom Mode</button>
+            <div class="glass-card highlight-card" style="margin-top: 20px;">
+                <h3 style="font-size: 1rem; margin-bottom: 10px;">ELITE CHALLENGE</h3>
+                <button class="btn btn-primary" onclick="app.initChallenge()">100-DAY DISCIPLINE</button>
+            </div>
+        </section>
 
-<!-- PAGE 5 -->
-<div class="page" id="page5">
-<h2>100 Day Dashboard</h2>
-<p id="dayDisplay"></p>
-<div class="progress-bar">
-<div class="progress-fill" id="xpBar"></div>
-</div>
-<p id="levelDisplay"></p>
-<div class="calendar" id="calendar"></div>
-<button onclick="goToWorkout()">Start Today's Mission</button>
-</div>
+        <section id="page5" class="page">
+            <h2 id="dash-title">DAY 1 / 100</h2>
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <p class="stat-label">System Level</p>
+                        <p class="stat-value" id="dash-level">LVL 0</p>
+                    </div>
+                    <p style="font-size: 0.8rem;" id="dash-xp-text">0 / 1000 XP</p>
+                </div>
+                <div class="xp-container">
+                    <div id="dash-xp-bar" class="xp-bar"></div>
+                </div>
+                <div class="calendar-grid" id="calendar"></div>
+            </div>
+            <button class="btn btn-primary" onclick="app.startMission()">START TODAY'S MISSION</button>
+        </section>
 
-<!-- PAGE 6 -->
-<div class="page" id="page6">
-<h2>Workout Mission</h2>
-<div id="workoutList"></div>
-<button onclick="completeMission()">Complete Mission</button>
-</div>
+        <section id="page6" class="page">
+            <h2>MISSION IN PROGRESS</h2>
+            <div id="workout-list"></div>
+            <button class="btn btn-primary" onclick="app.completeMission()">COMPLETE MISSION</button>
+        </section>
 
-<!-- PAGE 7 -->
-<div class="page" id="page7">
-<h2>MISSION COMPLETE</h2>
-<p id="xpGained"></p>
-<p id="levelAfter"></p>
-<button onclick="goDashboard()">Continue</button>
-</div>
+        <section id="page7" class="page">
+            <h1 style="color: var(--secondary);">MISSION COMPLETE</h1>
+            <div class="glass-card" style="text-align: center;">
+                <p id="reward-xp-gain" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">+100 XP</p>
+                <p class="stat-label">Updated Level</p>
+                <p class="stat-value" id="reward-lvl" style="font-size: 2rem;">LVL 1</p>
+                <div class="xp-container">
+                    <div id="reward-xp-bar" class="xp-bar"></div>
+                </div>
+                <div id="motivational-msg" style="margin-top: 20px; font-style: italic; color: var(--primary);">"Discipline Increased."</div>
+            </div>
+            <button class="btn btn-primary" onclick="app.navigate('page5')">CONTINUE</button>
+        </section>
 
-<script>
+    </div>
 
-let state={
-name:"",
-age:"",
-height:"",
-weight:"",
-goal:"",
-focus:[],
-mode:"",
-xp:0,
-currentDay:1,
-completedDays:[]
-};
+    <script>
+        const app = {
+            state: {
+                name: '',
+                age: '',
+                height: '',
+                weight: '',
+                goal: '',
+                focus: [],
+                currentDay: 1,
+                xp: 0,
+                completedDays: [],
+                lastCompletedDate: null
+            },
 
-function saveState(){localStorage.setItem("fitnessSensei",JSON.stringify(state))}
-function loadState(){
-let data=localStorage.getItem("fitnessSensei");
-if(data){state=JSON.parse(data)}
-}
+            init() {
+                const saved = localStorage.getItem('fitnessSenseiData');
+                if (saved) {
+                    this.state = JSON.parse(saved);
+                    this.checkStreak();
+                    this.navigate('page5');
+                }
+            },
 
-function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-}
+            navigate(pageId) {
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+                window.scrollTo(0,0);
+                if(pageId === 'page5') this.renderDashboard();
+            },
 
-function enterSystem(){
-let name=document.getElementById("nameInput").value;
-if(!name)return alert("Name required");
-state.name=name;
-saveState();
-showPage("page2");
-}
+            login() {
+                const name = document.getElementById('login-name').value;
+                if (!name) return alert("Identify yourself, recruit.");
+                this.state.name = name;
+                this.save();
+                this.navigate('page2');
+            },
 
-function saveUserData(){
-state.age=document.getElementById("age").value;
-state.height=document.getElementById("height").value;
-state.weight=document.getElementById("weight").value;
-state.goal=document.getElementById("goal").value;
-saveState();
-showPage("page3");
-}
+            saveUserData() {
+                const age = document.getElementById('user-age').value;
+                const height = document.getElementById('user-height').value;
+                const weight = document.getElementById('user-weight').value;
+                const goal = document.getElementById('user-goal').value;
 
-function toggleFocus(btn){
-btn.classList.toggle("selected");
-}
+                if (!age || !height || !weight || !goal) return alert("All data points are required.");
+                
+                Object.assign(this.state, { age, height, weight, goal });
+                this.save();
+                this.navigate('page3');
+            },
 
-function saveFocus(){
-let selected=[];
-document.querySelectorAll(".option-btn.selected").forEach(b=>selected.push(b.innerText));
-state.focus=selected;
-saveState();
-showPage("page4");
-}
+            toggleFocus(btn, value) {
+                btn.classList.toggle('selected');
+                if (this.state.focus.includes(value)) {
+                    this.state.focus = this.state.focus.filter(f => f !== value);
+                } else {
+                    this.state.focus.push(value);
+                }
+            },
 
-function setMode(mode){
-state.mode=mode;
-if(mode==="100"){
-state.currentDay=1;
-state.xp=0;
-state.completedDays=[];
-}
-saveState();
-renderDashboard();
-showPage("page5");
-}
+            saveFocus() {
+                if (this.state.focus.length === 0) return alert("Select at least one neural focus.");
+                this.save();
+                this.navigate('page4');
+            },
 
-function renderDashboard(){
-document.getElementById("dayDisplay").innerText=`Day ${state.currentDay} / 100`;
-document.getElementById("levelDisplay").innerText=`Level ${Math.floor(state.xp/1000)}`;
-let percent=(state.xp%1000)/10;
-document.getElementById("xpBar").style.width=percent+"%";
+            selectMode(mode) {
+                if(mode !== 'challenge') alert("Mode locked. Focus on Discipline Challenge.");
+            },
 
-let cal=document.getElementById("calendar");
-cal.innerHTML="";
-for(let i=1;i<=100;i++){
-let box=document.createElement("div");
-box.className="day-box";
-if(state.completedDays.includes(i))box.classList.add("completed");
-if(i===state.currentDay)box.classList.add("current");
-cal.appendChild(box);
-}
-}
+            initChallenge() {
+                this.state.currentDay = 1;
+                this.state.xp = 0;
+                this.state.completedDays = [];
+                this.save();
+                this.navigate('page5');
+            },
 
-function goToWorkout(){
-generateWorkout();
-showPage("page6");
-}
+            renderDashboard() {
+                const level = Math.floor(this.state.xp / 1000);
+                const currentXP = this.state.xp % 1000;
+                
+                document.getElementById('dash-title').innerText = `DAY ${this.state.currentDay} / 100`;
+                document.getElementById('dash-level').innerText = `LVL ${level}`;
+                document.getElementById('dash-xp-text').innerText = `${currentXP} / 1000 XP`;
+                
+                setTimeout(() => {
+                    document.getElementById('dash-xp-bar').style.width = `${(currentXP / 1000) * 100}%`;
+                }, 100);
 
-function generateWorkout(){
-let list=document.getElementById("workoutList");
-list.innerHTML="";
-let exercises=[
-"Push Ups x15",
-"Squats x20",
-"Plank 30s",
-"Lunges x15",
-"Jumping Jacks x30"
-];
-exercises.forEach(ex=>{
-let div=document.createElement("div");
-div.className="exercise";
-div.innerHTML=`<input type="checkbox"> ${ex}`;
-list.appendChild(div);
-});
-}
+                const calendar = document.getElementById('calendar');
+                calendar.innerHTML = '';
+                for (let i = 1; i <= 100; i++) {
+                    const day = document.createElement('div');
+                    day.className = 'day-cell';
+                    if (this.state.completedDays.includes(i)) day.classList.add('completed');
+                    if (i === this.state.currentDay) day.classList.add('current');
+                    day.innerText = i;
+                    calendar.appendChild(day);
+                }
+            },
 
-function completeMission(){
-let checks=document.querySelectorAll("#workoutList input:checked");
-if(checks.length<5){
-alert("Discipline Failure. Restart Required.");
-state.currentDay=1;
-state.xp=0;
-state.completedDays=[];
-saveState();
-renderDashboard();
-showPage("page5");
-return;
-}
-state.xp+=100;
-state.completedDays.push(state.currentDay);
-state.currentDay++;
-saveState();
+            startMission() {
+                const list = document.getElementById('workout-list');
+                list.innerHTML = '';
+                
+                const exercises = this.generateWorkouts();
+                exercises.forEach(ex => {
+                    const item = document.createElement('div');
+                    item.className = 'workout-item';
+                    item.innerHTML = `
+                        <div>
+                            <div style="font-weight:600">${ex.name}</div>
+                            <div style="font-size:0.8rem; color:var(--secondary)">${ex.req}</div>
+                        </div>
+                        <input type="checkbox" class="workout-check">
+                    `;
+                    list.appendChild(item);
+                });
+                this.navigate('page6');
+            },
 
-document.getElementById("xpGained").innerText="XP Gained: 100";
-document.getElementById("levelAfter").innerText=`Level: ${Math.floor(state.xp/1000)}`;
-showPage("page7");
-}
+            generateWorkouts() {
+                const base = [
+                    { name: "Cyber Squats", req: "3 Sets x 15 Reps", focus: "Legs" },
+                    { name: "Neural Pushups", req: "3 Sets x 12 Reps", focus: "Overall Body" },
+                    { name: "Void Planks", req: "60 Seconds", focus: "Core" },
+                    { name: "Data Curls", req: "3 Sets x 15 Reps", focus: "Arms" }
+                ];
+                // Filter based on focus or return all if 'Overall Body'
+                return this.state.focus.includes('Overall Body') ? base : base.filter(ex => this.state.focus.includes(ex.focus));
+            },
 
-function goDashboard(){
-renderDashboard();
-showPage("page5");
-}
+            completeMission() {
+                const checks = document.querySelectorAll('.workout-check');
+                const allDone = Array.from(checks).every(c => c.checked);
 
-loadState();
-</script>
+                if (!allDone) {
+                    alert("Discipline Failure. Restart Required.");
+                    this.initChallenge();
+                    return;
+                }
 
+                const gained = 100; // Medium difficulty
+                this.state.xp += gained;
+                this.state.completedDays.push(this.state.currentDay);
+                this.state.currentDay++;
+                this.state.lastCompletedDate = new Date().toDateString();
+                
+                this.save();
+                
+                // Set Reward Page
+                document.getElementById('reward-xp-gain').innerText = `+${gained} XP`;
+                document.getElementById('reward-lvl').innerText = `LVL ${Math.floor(this.state.xp / 1000)}`;
+                const currentXP = this.state.xp % 1000;
+                
+                const msgs = ["Discipline Increased.", "Strength Enhanced.", "Next Day Unlocked.", "Protocol Optimized."];
+                document.getElementById('motivational-msg').innerText = `"${msgs[Math.floor(Math.random()*msgs.length)]}"`;
+                
+                this.navigate('page7');
+                setTimeout(() => {
+                    document.getElementById('reward-xp-bar').style.width = `${(currentXP / 1000) * 100}%`;
+                }, 100);
+            },
+
+            checkStreak() {
+                if(!this.state.lastCompletedDate) return;
+                const last = new Date(this.state.lastCompletedDate);
+                const today = new Date();
+                const diff = (today - last) / (1000 * 60 * 60 * 24);
+                
+                if (diff > 2) {
+                    alert("Discipline Gap Detected. System Reset.");
+                    this.initChallenge();
+                }
+            },
+
+            save() {
+                localStorage.setItem('fitnessSenseiData', JSON.stringify(this.state));
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
 </body>
-</html>
+                  </html>
+                  
