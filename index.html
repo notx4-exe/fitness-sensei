@@ -3,509 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FITNESS SENSEI – Silent Ascend</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Thico Silks Matric Hr. Sec. School | Admissions 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0B0F1A;
-            --primary: #00F5A0;
-            --secondary: #00C3FF;
-            --text-main: #FFFFFF;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --radius: 16px;
-            --shadow-glow: 0 0 15px rgba(0, 245, 160, 0.4);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --gold: #D4AF37;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            margin: 0;
             font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
         }
 
-        /* Animated Background */
-        .bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 245, 160, 0.05) 0%, transparent 70%);
-            z-index: -1;
-            animation: pulseBg 8s infinite alternate;
-        }
-
-        @keyframes pulseBg {
-            0% { transform: scale(1); opacity: 0.5; }
-            100% { transform: scale(1.2); opacity: 0.8; }
-        }
-
-        #app-container {
-            width: 100%;
-            max-width: 480px;
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
             padding: 20px;
-            position: relative;
         }
 
-        /* SPA Sections */
-        .page {
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        .page.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Typography */
-        h1, h2, h3 {
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-align: center;
-        }
-
-        h1 { font-size: 2rem; color: var(--primary); text-shadow: var(--shadow-glow); }
-        .subtitle { font-size: 0.9rem; text-align: center; color: var(--secondary); margin-top: -10px; opacity: 0.8; }
-
-        /* UI Elements */
+        /* Glassmorphism Card Style */
         .glass-card {
             background: var(--glass);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 24px;
-            width: 100%;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        input, select {
-            width: 100%;
-            padding: 14px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 15px;
-            outline: none;
-            transition: border 0.3s;
-        }
+        header { text-align: center; padding: 50px 0; }
+        header h1 { font-size: 2.5rem; margin-bottom: 5px; color: var(--gold); }
+        header p { font-size: 1.1rem; opacity: 0.9; }
 
-        input:focus { border-color: var(--secondary); }
-
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: var(--radius);
-            font-family: 'Orbitron', sans-serif;
+        .badge {
+            display: inline-block;
+            background: var(--gold);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 50px;
             font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-top: 10px;
-            text-transform: uppercase;
+            margin-bottom: 15px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #000;
-            box-shadow: var(--shadow-glow);
-            animation: glowPulse 2s infinite;
-        }
-
-        @keyframes glowPulse {
-            0% { box-shadow: 0 0 5px rgba(0, 245, 160, 0.4); }
-            50% { box-shadow: 0 0 20px rgba(0, 245, 160, 0.7); }
-            100% { box-shadow: 0 0 5px rgba(0, 245, 160, 0.4); }
-        }
-
-        .btn-toggle {
-            background: var(--glass);
-            color: white;
-            border: 1px solid var(--glass-border);
-            margin: 5px 0;
-        }
-
-        .btn-toggle.selected {
-            background: var(--secondary);
-            color: #000;
-            border-color: var(--secondary);
-        }
-
-        /* Progress Bar */
-        .xp-container {
-            width: 100%;
-            background: rgba(0,0,0,0.5);
-            height: 12px;
-            border-radius: 6px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-
-        .xp-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            width: 0%;
-            transition: width 1s ease-in-out;
-        }
-
-        /* Calendar Grid */
-        .calendar-grid {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-            margin-top: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
 
-        .day-cell {
-            aspect-ratio: 1;
-            background: var(--glass);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
+        .stat-item { text-align: center; }
+        .stat-item h3 { color: var(--gold); font-size: 2rem; margin: 0; }
+
+        /* Form Styling */
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
             border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: white;
         }
 
-        .day-cell.completed {
-            background: var(--primary);
-            color: #000;
-            box-shadow: 0 0 8px var(--primary);
+        button {
+            background: var(--gold);
+            color: black;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
         }
 
-        .day-cell.current {
-            border: 2px solid var(--secondary);
-            animation: borderPulse 1s infinite alternate;
-        }
+        button:hover { transform: scale(1.02); opacity: 0.9; }
 
-        @keyframes borderPulse {
-            from { border-color: var(--secondary); }
-            to { border-color: #fff; }
-        }
-
-        /* Workout List */
-        .workout-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px;
-            background: var(--glass);
-            margin-bottom: 10px;
-            border-radius: 12px;
-        }
-
-        .workout-item input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
-            accent-color: var(--primary);
-            margin: 0;
-        }
-
-        .stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
-        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
-
-        .highlight-card {
-            border: 2px solid var(--primary);
-            box-shadow: inset 0 0 15px rgba(0, 245, 160, 0.2);
-        }
+        footer { text-align: center; padding: 40px; opacity: 0.7; font-size: 0.9rem; }
     </style>
 </head>
 <body>
-    <div class="bg-glow"></div>
-    <div id="app-container">
 
-        <section id="page1" class="page active">
-            <h1>FITNESS SENSEI</h1>
-            <p class="subtitle">Silent Ascend Protocol</p>
-            <div class="glass-card" style="margin-top: 40px;">
-                <input type="text" id="login-name" placeholder="IDENTIFY YOURSELF (NAME)">
-                <button class="btn btn-primary" onclick="app.login()">ENTER THE SYSTEM</button>
+<div class="container">
+    <header>
+        <div class="badge">ESTD 1994 • 32 YEARS OF EXCELLENCE</div>
+        <h1>THICO SILKS MATRICULATION HR. SEC. SCHOOL</h1>
+        <p>Thirubuvanam | Shaping Minds, Building Futures</p>
+    </header>
+
+    <section class="glass-card">
+        <h2 style="color: var(--gold);">ADMISSIONS OPEN 2026 - 2027</h2>
+        <p>Join our community from <strong>LKG to 11th Standard</strong>.</p>
+        <div class="grid">
+            <div class="stat-item">
+                <h3>11th Groups</h3>
+                <p>Maths (CS / Biology)</p>
             </div>
-        </section>
+            <div class="stat-item">
+                <h3>Activities</h3>
+                <p>Archery, Football, Yoga</p>
+            </div>
+            <div class="stat-item">
+                <h3>Clubs</h3>
+                <p>JRC & Anti-Drug Club</p>
+            </div>
+        </div>
+    </section>
 
-        <section id="page2" class="page">
-            <h2>PROTOCOL PARAMETERS</h2>
-            <div class="glass-card">
-                <input type="number" id="user-age" placeholder="AGE">
-                <input type="number" id="user-height" placeholder="HEIGHT (CM)">
-                <input type="number" id="user-weight" placeholder="WEIGHT (KG)">
-                <select id="user-goal">
-                    <option value="" disabled selected>SELECT GOAL</option>
-                    <option value="Bodybuilding">Bodybuilding</option>
-                    <option value="Fat Loss">Fat Loss</option>
-                    <option value="Casual">Casual</option>
-                    <option value="Warm Up">Warm Up</option>
+    <div class="grid">
+        <div class="glass-card">
+            <h3>Academic Achievements</h3>
+            <p>🏆 <strong>2026 Abacus Champions:</strong> Over 100+ students recognized for excellence.</p>
+            <p>High success rate in Board Examinations and State-level competitions.</p>
+        </div>
+
+        <div class="glass-card">
+            <h3>Quick Admission Query</h3>
+            <form action="https://formspree.io/f/your-id" method="POST">
+                <input type="text" placeholder="Parent Name" required>
+                <input type="tel" placeholder="Mobile Number" required>
+                <select>
+                    <option>Select Grade for Admission</option>
+                    <option>LKG - 9th</option>
+                    <option>11th Grade (Biology)</option>
+                    <option>11th Grade (Computer Science)</option>
                 </select>
-                <button class="btn btn-primary" onclick="app.saveUserData()">CONTINUE</button>
-            </div>
-        </section>
-
-        <section id="page3" class="page">
-            <h2>TARGET NEURAL FOCUS</h2>
-            <div id="focus-container">
-                <button class="btn btn-toggle" onclick="app.toggleFocus(this, 'Arms')">Arms</button>
-                <button class="btn btn-toggle" onclick="app.toggleFocus(this, 'Core')">Core</button>
-                <button class="btn btn-toggle" onclick="app.toggleFocus(this, 'Legs')">Legs</button>
-                <button class="btn btn-toggle" onclick="app.toggleFocus(this, 'Overall Body')">Overall Body</button>
-            </div>
-            <button class="btn btn-primary" onclick="app.saveFocus()">NEXT PHASE</button>
-        </section>
-
-        <section id="page4" class="page">
-            <h2>OPERATION MODE</h2>
-            <button class="btn btn-toggle" onclick="app.selectMode('daily')">Daily Exercise</button>
-            <button class="btn btn-toggle" onclick="app.selectMode('custom')">Custom Mode</button>
-            <div class="glass-card highlight-card" style="margin-top: 20px;">
-                <h3 style="font-size: 1rem; margin-bottom: 10px;">ELITE CHALLENGE</h3>
-                <button class="btn btn-primary" onclick="app.initChallenge()">100-DAY DISCIPLINE</button>
-            </div>
-        </section>
-
-        <section id="page5" class="page">
-            <h2 id="dash-title">DAY 1 / 100</h2>
-            <div class="glass-card">
-                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                    <div>
-                        <p class="stat-label">System Level</p>
-                        <p class="stat-value" id="dash-level">LVL 0</p>
-                    </div>
-                    <p style="font-size: 0.8rem;" id="dash-xp-text">0 / 1000 XP</p>
-                </div>
-                <div class="xp-container">
-                    <div id="dash-xp-bar" class="xp-bar"></div>
-                </div>
-                <div class="calendar-grid" id="calendar"></div>
-            </div>
-            <button class="btn btn-primary" onclick="app.startMission()">START TODAY'S MISSION</button>
-        </section>
-
-        <section id="page6" class="page">
-            <h2>MISSION IN PROGRESS</h2>
-            <div id="workout-list"></div>
-            <button class="btn btn-primary" onclick="app.completeMission()">COMPLETE MISSION</button>
-        </section>
-
-        <section id="page7" class="page">
-            <h1 style="color: var(--secondary);">MISSION COMPLETE</h1>
-            <div class="glass-card" style="text-align: center;">
-                <p id="reward-xp-gain" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">+100 XP</p>
-                <p class="stat-label">Updated Level</p>
-                <p class="stat-value" id="reward-lvl" style="font-size: 2rem;">LVL 1</p>
-                <div class="xp-container">
-                    <div id="reward-xp-bar" class="xp-bar"></div>
-                </div>
-                <div id="motivational-msg" style="margin-top: 20px; font-style: italic; color: var(--primary);">"Discipline Increased."</div>
-            </div>
-            <button class="btn btn-primary" onclick="app.navigate('page5')">CONTINUE</button>
-        </section>
-
+                <button type="submit">SEND INQUIRY</button>
+            </form>
+        </div>
     </div>
 
-    <script>
-        const app = {
-            state: {
-                name: '',
-                age: '',
-                height: '',
-                weight: '',
-                goal: '',
-                focus: [],
-                currentDay: 1,
-                xp: 0,
-                completedDays: [],
-                lastCompletedDate: null
-            },
+    <footer>
+        <p>© 2026 Thico Silks Matriculation Higher Secondary School. All Rights Reserved.</p>
+        <p>Contact: +91 83005 48449</p>
+    </footer>
+</div>
 
-            init() {
-                const saved = localStorage.getItem('fitnessSenseiData');
-                if (saved) {
-                    this.state = JSON.parse(saved);
-                    this.checkStreak();
-                    this.navigate('page5');
-                }
-            },
-
-            navigate(pageId) {
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                document.getElementById(pageId).classList.add('active');
-                window.scrollTo(0,0);
-                if(pageId === 'page5') this.renderDashboard();
-            },
-
-            login() {
-                const name = document.getElementById('login-name').value;
-                if (!name) return alert("Identify yourself, recruit.");
-                this.state.name = name;
-                this.save();
-                this.navigate('page2');
-            },
-
-            saveUserData() {
-                const age = document.getElementById('user-age').value;
-                const height = document.getElementById('user-height').value;
-                const weight = document.getElementById('user-weight').value;
-                const goal = document.getElementById('user-goal').value;
-
-                if (!age || !height || !weight || !goal) return alert("All data points are required.");
-                
-                Object.assign(this.state, { age, height, weight, goal });
-                this.save();
-                this.navigate('page3');
-            },
-
-            toggleFocus(btn, value) {
-                btn.classList.toggle('selected');
-                if (this.state.focus.includes(value)) {
-                    this.state.focus = this.state.focus.filter(f => f !== value);
-                } else {
-                    this.state.focus.push(value);
-                }
-            },
-
-            saveFocus() {
-                if (this.state.focus.length === 0) return alert("Select at least one neural focus.");
-                this.save();
-                this.navigate('page4');
-            },
-
-            selectMode(mode) {
-                if(mode !== 'challenge') alert("Mode locked. Focus on Discipline Challenge.");
-            },
-
-            initChallenge() {
-                this.state.currentDay = 1;
-                this.state.xp = 0;
-                this.state.completedDays = [];
-                this.save();
-                this.navigate('page5');
-            },
-
-            renderDashboard() {
-                const level = Math.floor(this.state.xp / 1000);
-                const currentXP = this.state.xp % 1000;
-                
-                document.getElementById('dash-title').innerText = `DAY ${this.state.currentDay} / 100`;
-                document.getElementById('dash-level').innerText = `LVL ${level}`;
-                document.getElementById('dash-xp-text').innerText = `${currentXP} / 1000 XP`;
-                
-                setTimeout(() => {
-                    document.getElementById('dash-xp-bar').style.width = `${(currentXP / 1000) * 100}%`;
-                }, 100);
-
-                const calendar = document.getElementById('calendar');
-                calendar.innerHTML = '';
-                for (let i = 1; i <= 100; i++) {
-                    const day = document.createElement('div');
-                    day.className = 'day-cell';
-                    if (this.state.completedDays.includes(i)) day.classList.add('completed');
-                    if (i === this.state.currentDay) day.classList.add('current');
-                    day.innerText = i;
-                    calendar.appendChild(day);
-                }
-            },
-
-            startMission() {
-                const list = document.getElementById('workout-list');
-                list.innerHTML = '';
-                
-                const exercises = this.generateWorkouts();
-                exercises.forEach(ex => {
-                    const item = document.createElement('div');
-                    item.className = 'workout-item';
-                    item.innerHTML = `
-                        <div>
-                            <div style="font-weight:600">${ex.name}</div>
-                            <div style="font-size:0.8rem; color:var(--secondary)">${ex.req}</div>
-                        </div>
-                        <input type="checkbox" class="workout-check">
-                    `;
-                    list.appendChild(item);
-                });
-                this.navigate('page6');
-            },
-
-            generateWorkouts() {
-                const base = [
-                    { name: "Cyber Squats", req: "3 Sets x 15 Reps", focus: "Legs" },
-                    { name: "Neural Pushups", req: "3 Sets x 12 Reps", focus: "Overall Body" },
-                    { name: "Void Planks", req: "60 Seconds", focus: "Core" },
-                    { name: "Data Curls", req: "3 Sets x 15 Reps", focus: "Arms" }
-                ];
-                // Filter based on focus or return all if 'Overall Body'
-                return this.state.focus.includes('Overall Body') ? base : base.filter(ex => this.state.focus.includes(ex.focus));
-            },
-
-            completeMission() {
-                const checks = document.querySelectorAll('.workout-check');
-                const allDone = Array.from(checks).every(c => c.checked);
-
-                if (!allDone) {
-                    alert("Discipline Failure. Restart Required.");
-                    this.initChallenge();
-                    return;
-                }
-
-                const gained = 100; // Medium difficulty
-                this.state.xp += gained;
-                this.state.completedDays.push(this.state.currentDay);
-                this.state.currentDay++;
-                this.state.lastCompletedDate = new Date().toDateString();
-                
-                this.save();
-                
-                // Set Reward Page
-                document.getElementById('reward-xp-gain').innerText = `+${gained} XP`;
-                document.getElementById('reward-lvl').innerText = `LVL ${Math.floor(this.state.xp / 1000)}`;
-                const currentXP = this.state.xp % 1000;
-                
-                const msgs = ["Discipline Increased.", "Strength Enhanced.", "Next Day Unlocked.", "Protocol Optimized."];
-                document.getElementById('motivational-msg').innerText = `"${msgs[Math.floor(Math.random()*msgs.length)]}"`;
-                
-                this.navigate('page7');
-                setTimeout(() => {
-                    document.getElementById('reward-xp-bar').style.width = `${(currentXP / 1000) * 100}%`;
-                }, 100);
-            },
-
-            checkStreak() {
-                if(!this.state.lastCompletedDate) return;
-                const last = new Date(this.state.lastCompletedDate);
-                const today = new Date();
-                const diff = (today - last) / (1000 * 60 * 60 * 24);
-                
-                if (diff > 2) {
-                    alert("Discipline Gap Detected. System Reset.");
-                    this.initChallenge();
-                }
-            },
-
-            save() {
-                localStorage.setItem('fitnessSenseiData', JSON.stringify(this.state));
-            }
-        };
-
-        window.onload = () => app.init();
-    </script>
 </body>
-                  </html>
-                  
+</html>
